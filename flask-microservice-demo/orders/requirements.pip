@@ -1,0 +1,6 @@
+flask==2.0.3         # Versión estable con Jinja2 3.0.x
+jinja2==3.0.3         # Incluye Markup donde Flask lo espera
+werkzeug==2.0.3       # Compatible con Flask 2.0.x
+markupsafe==2.0.1     # Dependencia adicional para seguridad
+requests==2.28.1      # Mantén otras librerías actualizadas
+faker==15.3.4

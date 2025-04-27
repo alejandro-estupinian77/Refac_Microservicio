@@ -1,0 +1,86 @@
+version: "2.1"
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik-public
+
+  backend:
+    container_name: demo_backend
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DEBUG=True
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.services.backend.loadbalancer.server.port=5000"
+    networks:
+      - traefik-public
+
+  orders:
+    container_name: demo_orders
+    build:
+      context: ./orders
+    ports:
+      - "5001:5000"
+    environment:
+      - DEBUG=True
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.orders.rule=PathPrefix(`/orders`)"
+      - "traefik.http.routers.orders.entrypoints=web"
+      - "traefik.http.services.orders.loadbalancer.server.port=5000"
+    networks:
+      - traefik-public
+
+  items:
+    container_name: demo_items
+    build:
+      context: ./items
+    ports:
+      - "5002:5000"
+    environment:
+      - DEBUG=True
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.items.rule=PathPrefix(`/items`)"
+      - "traefik.http.routers.items.entrypoints=web"
+      - "traefik.http.services.items.loadbalancer.server.port=5000"
+    networks:
+      - traefik-public
+
+  aggregate:
+    container_name: demo_aggregate
+    build:
+      context: ./aggregate
+    ports:
+      - "5003:5000"
+    environment:
+      - DEBUG=True
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.aggregate.rule=PathPrefix(`/aggregate`)"
+      - "traefik.http.routers.aggregate.entrypoints=web"
+      - "traefik.http.services.aggregate.loadbalancer.server.port=5000"
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    name: traefik-public
