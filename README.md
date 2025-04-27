@@ -24,3 +24,6 @@ En este caso, se empleó el microservicio de orders para ejemplificar la refacto
 3. Endpoint que revisa el estado del servicio: Permite llevar un monitoreo del mismo, así como mejorar su orquestación.
 
 NOTA: Todos los archivos subidos a este repositorio ya cuentan con los cambios realizados respecto a la versión original. Por eso, no se ha realizado ningún commit directamente a este repo.
+
+## Créditos
+Este proyecto está basado en [flask-microservice-demo](https://github.com/mblitherland/flask-microservice-demo) creado por [@mblitherland](https://github.com/mblitherland).
